@@ -4,9 +4,9 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "FC Testbench",
+            "label": "Fully Connected TB",
             "type": "shell",
-            "command": "iverilog -o fc.out fc.v fc_tb.v & vvp fc.out",
+            "command": "iverilog -o fc/fc.out fc/fc.v fc/fc_tb.v ice_ram.v & vvp fc/fc.out",
             "presentation": {
                 "reveal": "always",
                 "panel": "new"

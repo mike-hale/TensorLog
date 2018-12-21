@@ -43,8 +43,6 @@ module fc #(
     input [31:0] error_odata
 );
 
-//parameter RATE = {1'b0,16'b0,15'd1638}; // Approx 0.05
-
 //reg [31:0] weights [OUTPUT_WIDTH - 1:0] [INPUT_WIDTH - 1:0];
 /* Weight addressing scheme:
    0x0000: w_0_0 w_1_0 w_2_0 ... w_9_0 0 0 0 0 0 0 <-- weights corresponding to input 0
@@ -222,9 +220,9 @@ always @(posedge clk) begin
                 o_val_addr <= o_val_addr + 1;
                 // Again we must only update if the output was positive
                 if (o_val_odata[31] == 0) begin // Positive value
-					     state <= BP_COMP;
-                    wt_addr <= {'b0,fc_input_idx[O_ADDR_WIDTH - 1:0]};
-						  mem_valid <= 0;
+					state <= BP_COMP;
+                    wt_addr <= fc_input_idx[O_ADDR_WIDTH - 1:0];
+					mem_valid <= 0;
                     lastin_addr <= 0;
                     fc_in_val <= fc_input;
                 end

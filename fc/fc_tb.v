@@ -13,51 +13,52 @@ wire wt_we;
 wire [13:0] wt_addr;
 wire [31:0] wt_idata;
 wire [31:0] wt_odata;
-fc_weights weights (
-  .clka(clk), // input clka
-  .wea(wt_we), // input [0 : 0] wea
-  .addra(wt_addr), // input [13 : 0] addra
-  .dina(wt_idata), // input [15 : 0] dina
-  .douta(wt_odata) // output [15 : 0] douta
+ice_ram #(14,32,"fc/weights.dat") weights (
+  .clk(clk), // input clka
+  .we(wt_we), // input [0 : 0] wea
+  .rst(1'b0),
+  .addr(wt_addr), // input [13 : 0] addra
+  .din(wt_idata), // input [15 : 0] dina
+  .dout(wt_odata) // output [15 : 0] douta
 );
 
 wire o_val_rst, o_val_we;
 wire [3:0] o_val_addr;
 wire [31:0] o_val_idata;
 wire [31:0] o_val_odata;
-fc_o_val output_val (
-  .clka(clk), // input clka
-  .rsta(o_val_rst), // input rsta
-  .wea(o_val_we), // input [0 : 0] wea
-  .addra(o_val_addr), // input [3 : 0] addra
-  .dina(o_val_idata), // input [15 : 0] dina
-  .douta(o_val_odata) // output [15 : 0] douta
+ice_ram #(4,32) output_val (
+  .clk(clk), // input clka
+  .we(o_val_we), // input [0 : 0] wea
+  .rst(o_val_rst), // input rsta
+  .addr(o_val_addr), // input [3 : 0] addra
+  .din(o_val_idata), // input [15 : 0] dina
+  .dout(o_val_odata) // output [15 : 0] douta
 );
 
 wire lastin_rst, lastin_we;
 wire [9:0] lastin_addr;
 wire [31:0] lastin_idata;
 wire [31:0] lastin_odata;
-fc_lastin last_input (
-  .clka(clk), // input clka
-  .rsta(lastin_rst), // input rsta
-  .wea(lastin_we), // input [0 : 0] wea
-  .addra(lastin_addr), // input [9 : 0] addra
-  .dina(lastin_idata), // input [15 : 0] dina
-  .douta(lastin_odata) // output [15 : 0] douta
+ice_ram #(10,32) last_input (
+  .clk(clk), // input clka
+  .we(lastin_we), // input [0 : 0] wea
+  .rst(lastin_rst), // input rsta
+  .addr(lastin_addr), // input [9 : 0] addra
+  .din(lastin_idata), // input [15 : 0] dina
+  .dout(lastin_odata) // output [15 : 0] douta
 );
 
 wire error_rst, error_we;
 wire [9:0] error_addr;
 wire [31:0] error_idata;
 wire [31:0] error_odata;
-fc_error error_val (
-  .clka(clk), // input clka
-  .rsta(error_rst), // input rsta
-  .wea(error_we), // input [0 : 0] wea
-  .addra(error_addr), // input [9 : 0] addra
-  .dina(error_idata), // input [15 : 0] dina
-  .douta(error_odata) // output [15 : 0] douta
+ice_ram #(10,32) error_val (
+  .clk(clk), // input clka
+  .we(error_we), // input [0 : 0] wea
+  .rst(error_rst), // input rsta
+  .addr(error_addr), // input [9 : 0] addra
+  .din(error_idata), // input [15 : 0] dina
+  .dout(error_odata) // output [15 : 0] douta
 );
 
 // Image
@@ -66,12 +67,13 @@ reg [9:0] image_addr;
 reg [31:0] image_idata;
 wire [31:0] image_odata;
 
-fc_input image (
-  .clka(clk), // input clka
-  .wea(image_we), // input [0 : 0] wea
-  .addra(image_addr), // input [11 : 0] addra
-  .dina(image_idata), // input [31 : 0] dina
-  .douta(image_odata) // output [31 : 0] douta
+ice_ram #(10,32,"fc/image.dat") image (
+  .clk(clk), // input clka
+  .we(image_we), // input [0 : 0] wea
+  .rst(1'b0),
+  .addr(image_addr), // input [11 : 0] addra
+  .din(image_idata), // input [31 : 0] dina
+  .dout(image_odata) // output [31 : 0] douta
 );
 
 parameter LOAD_IMAGE = 0;
