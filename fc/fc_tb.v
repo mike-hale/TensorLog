@@ -1,3 +1,5 @@
+`include "arith.vh"
+
 module fc_tb();
 
 reg clk, forward, load_weights, out_rdy;
@@ -84,6 +86,7 @@ parameter BP_SEND = 4;
 parameter BP_REC = 5;
 
 reg mem_valid, in_valid;
+reg [31:0] all_outs [9:0];
 reg [2:0] state;
 wire out_valid;
 
@@ -134,11 +137,43 @@ always @(posedge clk) begin
 	 
 	FW_REC: begin
 	    if (out_valid == 1) begin
-		     $display("Output (%d); %d.%05d", fc_out_idx, fc_output[30:15],3.0517*fc_output[14:0]);
-		     if (fc_out_idx == 9)
-			      state <= UART_FW;
-		 end
-    end
+		      $display("Output (%d); %d.%05d", fc_out_idx, fc_output[30:15],3.0517*fc_output[14:0]);
+          all_outs[fc_out_idx] = fc_output;
+		      if (fc_out_idx == 9) begin
+			      state <= BP_SEND;
+            fc_input <= {~all_outs[0][31], all_outs[0][30:0]};
+            fc_in_idx <= 0;
+            in_valid <= 1;
+          end
+		  end
+  end
+
+  BP_SEND: begin
+      if (in_rdy) begin
+          if (fc_in_idx == 9) begin
+              state <= BP_REC;
+              image_addr <= 0;
+              in_valid <= 0;
+              mem_valid <= 0;
+          end else begin
+              fc_in_idx <= fc_in_idx + 1;
+              fc_input <= add(all_outs[fc_in_idx + 1], ~fc_in_idx + 2);
+         end
+      end
+  end
+
+  BP_REC: begin
+	    if (out_valid == 1) begin
+		      //$display("Backprop (%d); %d.%05d", fc_out_idx, fc_output[30:15],3.0517*fc_output[14:0]);
+		      if (fc_out_idx == 1023) begin
+			      state <= FW_SEND;
+            fc_input <= 0;
+            fc_in_idx <= 0;
+            in_valid <= 1;
+          end
+		  end
+  end
+
   endcase	 
 end
 

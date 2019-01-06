@@ -6,7 +6,7 @@
         {
             "label": "Fully Connected TB",
             "type": "shell",
-            "command": "iverilog -o fc/fc.out fc/fc.v fc/fc_tb.v ice_ram.v & vvp fc/fc.out",
+            "command": "iverilog -g2009 -I arith -o fc/fc.out fc/fc.v fc/fc_tb.v ice_ram.v & vvp fc/fc.out",
             "presentation": {
                 "reveal": "always",
                 "panel": "new"

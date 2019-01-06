@@ -25,7 +25,7 @@ initial begin
         open_file = $fopen(init_file, "r");
         for (i=0; i<mem_size; i=i+1) begin
             scan_ret = $fscanf(open_file, "%x\n", mem[i]); // read directly into memory
-            $display("Address(%x): %d.%05d", i, mem[i][30:15], 3.018*mem[i][14:0]);
+            //$display("Address(%x): %d.%05d", i, mem[i][30:15], 3.018*mem[i][14:0]);
         end
     end
 end
